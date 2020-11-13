@@ -1,0 +1,92 @@
+<!--
+	author : Abdullah Çiftçi
+	history: 18.05.2020
+	Open source code
+-->
+<html>
+	<head></head>
+	<body>
+		<script type="text/javascript">
+			function bas(){
+				var grup_olacak_kisi_sayisi=stringToInt(document.getElementById("grup_sayisi").value);
+				var girdi_arr=metinParcala(document.getElementById("kisiler").value);
+				var cikti_arr=rastgeleSecim(girdi_arr,grup_olacak_kisi_sayisi);
+				var cikti_html="<ul>";
+				var grup_sayisi=cikti_arr.length;
+				console.log(cikti_arr);
+				for(var i=0; i < grup_sayisi ; i++){
+					cikti_html+="<li>"+(i+1)+".<ul>";
+						for(var j=0;j<cikti_arr[i].length;j++){
+							cikti_html+="<li>"+cikti_arr[i][j]+"</li>";
+						}
+					cikti_html+="</ul></li>";
+				}
+				cikti_html+="</ul>";
+				document.getElementById("sonuc").innerHTML=cikti_html;
+			}
+			
+			function rastgeleSecim(girdi_arr,bir_grubun_sayisi){
+				var toplam_sayi=girdi_arr.length;
+				var cikti_arr=new Array();
+				var grup_sayisi=Math.round(girdi_arr.length/bir_grubun_sayisi);
+				var control=[];
+				var devam=true
+				var sayi;
+				var eklensinmi;
+				for(var i=0;i<grup_sayisi;i++){
+					cikti_arr[i]=new Array;
+				}
+				while(devam){
+					if(control.length!=toplam_sayi){
+						eklensinmi=true;
+						sayi=rastgeleSayi(toplam_sayi);	
+						for(var i=0; i<control.length;i++){
+							if(control[i]===sayi){
+								eklensinmi=false;
+								break;
+							}
+						}
+						if(eklensinmi){
+							control.push(sayi);
+							for(var i=0;i<grup_sayisi;i++){
+								if(cikti_arr[i].length != bir_grubun_sayisi){
+										cikti_arr[i].push(girdi_arr[sayi]);
+										break;
+										
+								}
+							}
+						}			
+					}else{
+						devam=false;
+					}
+				}
+				return cikti_arr;
+			}
+			function metinParcala(string){
+				return string.split(",");
+			}
+			function rastgeleSayi(sayi){
+  				return Math.floor(Math.random()*sayi);
+			}
+			function stringToInt(string){
+				return parseInt(string, 10);
+			}
+		</script>
+		<h2 style="margin-left:30px; margin-top:30px">Çekiliş Yap</h2>
+		<div style="margin-left:30px; margin-top:30px">
+			<label>Çekiliş Metni</label>
+			<br>
+			<textarea id="kisiler" style="width:200; height:200";></textarea>
+			<br>
+			<br>
+			<label>Bir grupta olacak kişi sayısı</label>
+			<br>
+			<input type="text" id="grup_sayisi"></input>
+			<br>
+			<br>
+			<button onclick="bas()">Çekiliş Yap</button>
+		</div>
+		<div id="sonuc" style="margin-left:30px; margin-top:30px">Sonuclar</div>
+		<div id="bilgilendirme">Her element arasına <strong>virgül</strong> koyarak çekiliş yapınız</div>
+	</body>
+</html>
